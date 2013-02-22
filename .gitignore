@@ -1,0 +1,6 @@
+/ebin
+/cover
+erl_crash.dump
+.dialyzer_plt
+.dialyzer.base_plt
+.*.swp
