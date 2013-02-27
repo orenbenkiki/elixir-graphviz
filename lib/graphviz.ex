@@ -25,6 +25,18 @@ defmodule GraphViz do
     values, but this module just allows you to emit anything you want without
     any regard to whether GraphViz will accept them or not.
 
+  * No formatting: Attributes are expected to be printable (that is, allowed
+    inside `\#{...}`. There is no automatic `"` added around attribute values
+    so it is the caller's responsibility to do any form of quoting needed
+    (e.g., if a label contains spaces, the caller needs to use `inspect("Foo
+    Bar")` as the label instead of simply `"Foo Bar"`. Likewise, if a style
+    should be `"round,filled"` then the caller needs to use
+    `inspect("round,filled")` instead of, say, a nice `[ :round, :filled ]`.
+    The only upside to this is that setting a label to a simple `<...html...>`
+    "just works". That, and the fact that all attributes are printed exactly
+    the same without any complex special confusing rules. Again, this is
+    hopefully less of an issue for a code-generated diagram.
+
   * Addition only: You can add elements to the graph but you can't take them
     out. Mercifully it is at least possible to update elements after they have
     been added.
@@ -339,27 +351,13 @@ defmodule GraphViz do
   end
 
   # Print a graph attribute. We terminate graph and edge/node attributes
-  # differently. It is safest to prin the attributes at the end of each
+  # differently. It is safest to print the attributes at the end of each
   # (sub)graph so they will not be interpreted as defaults for the elements.
   @spec print_attribute(:io.device, { name :: atom, value :: any }, terminator :: String.t) :: :ok
 
   defp print_attribute(device, { name, value }, terminator) do
-    IO.puts(device, "#{name} = #{show(value)}#{terminator}")
+    IO.puts(device, "#{name} = #{value}#{terminator}")
     :ok
-  end
-
-  # Convert a value to a string for printing. We want strings values to be
-  # quoted, but atoms to not have a leading `:`, so none of the built-in
-  # functions quite work.
-  @spec show(any) :: String.t
-
-  defp show(atom)
-  when is_atom(atom) do
-    "#{atom}"
-  end
-
-  defp show(value) do
-    "#{inspect(value)}"
   end
 
 end

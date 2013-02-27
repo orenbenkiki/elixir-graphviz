@@ -20,7 +20,8 @@ defmodule PrintTest do
   end
 
   test "print directed graph" do
-    graph = GraphViz.Graph[ name: "name", is_strict: true, is_directed: true, attributes: [ label: "A label", rankdir: :LR ] ]
+    graph = GraphViz.Graph[ name: "name", is_strict: true, is_directed: true,
+                            attributes: [ label: inspect("A label"), rankdir: :LR ] ]
          |> GraphViz.add(GraphViz.SubGraph[ id: :cluster, is_cluster: true, attributes: [ label: "Cluster" ] ])
          |> GraphViz.add(GraphViz.SubGraph[ id: :sub_graph, parent: :cluster, is_cluster: false ])
          |> GraphViz.add(GraphViz.Node[ id: :source, parent: :sub_graph, attributes: [ label: "Source" ] ])
@@ -29,18 +30,18 @@ defmodule PrintTest do
     assert_prints GraphViz.print(&1, graph), """
     strict digraph "name" {
     ":target" [
-    label = "Target",
+    label = Target,
     ];
     subgraph "cluster_:cluster" {
     subgraph ":sub_graph" {
     ":source" [
-    label = "Source",
+    label = Source,
     ];
     }
-    label = "Cluster";
+    label = Cluster;
     }
     ":source" -> ":target" [
-    label = "Edge",
+    label = Edge,
     ];
     label = "A label";
     rankdir = LR;
