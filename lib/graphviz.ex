@@ -92,7 +92,7 @@ defmodule GraphViz do
   # long as identifiers are unique.
   @type id :: any
 
-  defrecord Graph, name: nil, is_directed: nil, is_strict: nil, elements: [], by_id: HashDict.new, attributes: [] do
+  defrecord Graph, name: nil, is_directed: nil, is_strict: nil, elements: [], by_id: HashDict.new, attributes: [], data: nil do
     @moduledoc """
     A graph contains the top-level elements (nodes or sub-graphs) and edges
     connecting the nodes.
@@ -116,9 +116,13 @@ defmodule GraphViz do
 
     # Optional additional graph attributes.
     record_type attributes: [ Keyword.t ]
+
+    # Optional additional arbitrary data. This doesn't impact the generated
+    # diagram in any way.
+    record_type data: any
   end
 
-  defrecord SubGraph, id: nil, parent: nil, is_cluster: nil, attributes: [], elements: [] do
+  defrecord SubGraph, id: nil, parent: nil, is_cluster: nil, attributes: [], elements: [], data: nil do
     @moduledoc """
     A sub-graph groups together multiple elements. This scopes attributes etc.
     If it is also a cluster, then `dot` will lay it in a box.
@@ -140,9 +144,13 @@ defmodule GraphViz do
 
     # The elements contained in the cluster.
     record_type elements: [ GraphViz.id ]
+
+    # Optional additional arbitrary data. This doesn't impact the generated
+    # diagram in any way.
+    record_type data: any
   end
 
-  defrecord Node, id: nil, parent: nil, attributes: [], outgoing: [], incoming: [] do
+  defrecord Node, id: nil, parent: nil, attributes: [], outgoing: [], incoming: [], data: nil do
     @moduledoc """
     A node represents an atomic shape in the diagram. Actually, GraphViz
     recognizes sub-structure inside nodes (especially if they are record or
@@ -166,9 +174,13 @@ defmodule GraphViz do
 
     # List of edges terminating at this node.
     record_type incoming: [ GraphViz.id ]
+
+    # Optional additional arbitrary data. This doesn't impact the generated
+    # diagram in any way.
+    record_type data: any
   end
 
-  defrecord Edge, id: nil, source: nil, target: nil, attributes: [] do
+  defrecord Edge, id: nil, source: nil, target: nil, attributes: [], data: nil do
     @moduledoc """
     An edge connects two nodes. In directed graphs, this causes `dot` to impose
     a rank constraint between the source and target nodes.
@@ -185,6 +197,10 @@ defmodule GraphViz do
 
     # Optional additional edge attributes.
     record_type attributes: [ Keyword.t ]
+
+    # Optional additional arbitrary data. This doesn't impact the generated
+    # diagram in any way.
+    record_type data: any
   end
 
   # The types of elements a graph may contain.
