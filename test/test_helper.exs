@@ -2,7 +2,7 @@
 # don't, this will fail horribly! Arguably, the ExUnit library should provide
 # direct support for this, including some better reporting of the aggregated
 # coverage results.
-if System.argv |> List.member?("--coverage") do
+if System.argv |> Enum.member?("--coverage") do
   IO.puts "Preparing for collecting coverage..."
   :cover.start
   beam = Path.expand("../../ebin", __FILE__) |> to_char_list

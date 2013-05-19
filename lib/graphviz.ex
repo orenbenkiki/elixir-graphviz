@@ -212,7 +212,7 @@ defmodule GraphViz do
   @spec lookup(Graph.t, id) :: element
 
   def lookup(graph = Graph[], id) do
-    Dict.get!(graph.by_id, id)
+    Dict.get(graph.by_id, id)
   end
 
   @doc """
